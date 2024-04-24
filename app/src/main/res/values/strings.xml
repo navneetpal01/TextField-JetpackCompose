@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TextField-JetpackCompose</string>
     <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="hide_password">Hide Password</string>
+    <string name="unhide_password">Unhide Password</string>
+    <string name="sign_in">Sign In</string>
 </resources>
