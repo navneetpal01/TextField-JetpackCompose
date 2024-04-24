@@ -24,7 +24,7 @@ import com.example.textfield_jetpackcompose.R
 
 
 @Composable
-fun OnBoardingScreen(
+fun LoginScreen(
     onSignInSummit: (email: String, password: String) -> Unit
 ) {
     Column(
@@ -65,6 +65,68 @@ fun OnBoardingScreen(
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
             enabled = emailState.isValid && passwordState.isValid
+        ) {
+            Text(
+                text = stringResource(id = R.string.sign_in)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SignUpScreen(
+    onSignInSummit: (email: String, password: String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        val focusRequester = remember { FocusRequester() }
+        val emailState by rememberSaveable(stateSaver = EmailStateSaver) {
+            mutableStateOf(EmailState())
+        }
+        val passwordState = remember { PasswordState() }
+        val confirmPasswordState = remember { ConfirmPasswordState(passwordState = passwordState)}
+        Email(emailState = emailState, onImeAction = { focusRequester.requestFocus() })
+
+
+        val onSummit = {
+            if (emailState.isValid && passwordState.isValid && confirmPasswordState.isValid) {
+                onSignInSummit(emailState.text, passwordState.text)
+            }
+        }
+
+        Password(
+            label = stringResource(id = R.string.password),
+            passwordState = passwordState,
+            modifier = Modifier.focusRequester(focusRequester),
+            onImeAction = { onSummit() }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+
+        Password(
+            label = stringResource(id = R.string.confirm_password),
+            passwordState = confirmPasswordState,
+            modifier = Modifier.focusRequester(focusRequester),
+            onImeAction = { onSummit() }
+        )
+
+
+
+        Button(
+            onClick = {
+                onSummit()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            enabled = emailState.isValid && passwordState.isValid && confirmPasswordState.isValid
         ) {
             Text(
                 text = stringResource(id = R.string.sign_in)
